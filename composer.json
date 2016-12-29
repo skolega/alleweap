@@ -4,11 +4,15 @@
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
-        "psr-4": { "": "src/" },
-        "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
+        "psr-4": {
+            "": "src/"
+        },
+        "classmap": ["app/AppKernel.php", "app/AppCache.php"]
     },
     "autoload-dev": {
-        "psr-4": { "Tests\\": "tests/" }
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "require": {
         "php": ">=5.5.9",
@@ -21,7 +25,9 @@
         "symfony/polyfill-apcu": "^1.0",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
-        "incenteev/composer-parameter-handler": "^2.0"
+        "incenteev/composer-parameter-handler": "^2.0",
+        "mopa/bootstrap-bundle": "^3.1",
+        "twbs/bootstrap": "^3.3"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

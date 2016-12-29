@@ -3,75 +3,87 @@
 {% block body %}
     <div id="wrapper">
         <div id="container">
+
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-2">
                     {{ userData.userLogin }}</br>
                     {{ userData.userCompany }}</br>
                     {{ userData.userPostcode  }}</br>
-                </div>
-                <div class="col-md-6">
                     {{ userData.userCity   }}</br>
+                </div>
+                <div class="col-md-2">
                     {{ userData.userAddress   }}</br>
                     {{ userData.userEmail   }}</br>
                     {{ userData.userPhone   }}</br>
                 </div>
+                <div class="col-md-1 col-md-push-6">
+                    Wystawionych Aukcji : {{ countAuctions }}
+                </div>
             </div>
+            {% include 'default/menu.html.twig' %}
             <div class="row">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox"></input></th>
-                            <th>Id</th>
-                            <th>Nazwa</th>
-                            <th>Start</th>
-                            <th>Koniec</th>
-                            <th>Ilość</th>
-                            <th>Zdjęć</th>
-                            <th>Miejsce</th>
-                            <th>Cena kup teraz</th>
-                            <th>kup teraz</th>
-                            <th>Opis</th>
-                            <th>odsłon</th>
-                            <th>Opcje</th>
-                            <th>isState</th>
-                            <th>Str Qtty</th>
-                            <th>ForGuess</th>
-                            <th>EndingInfo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for offers in offersList %}
+                <div class="col-md-12">                     
+                    <table class="table table-hover">
+                        <thead>
                             <tr>
-                                <td><input type="checkbox"></input></td>
-                                <td>{{ offers.itemInfo.itId }}</td>
-                                <td>{{ offers.itemInfo.itName }}</td>
-                                <td>{{ offers.itemInfo.itStartingTime }}</td> 
-                                <td>{{ offers.itemInfo.itEndingTime }}</td>
-                                <td>{{ offers.itemInfo.itQuantity }}</td>
-                                <td>{{ offers.itemInfo.itFotoCount }}</td>
-                                <td>{{ offers.itemInfo.itLocation }}</td>
-                                <td>{{ offers.itemInfo.itBuyNowPrice }}</td>
-                                <td>{{ offers.itemInfo.itBuyNowActive }}</td>
-                                <td style="width:200px; height: 20px">
-                                    <div style="width:200px; height: 20px; overflow:hidden;">
-                                        {{ offers.itemInfo.itDescription }}
-                                    </div>
-                                </td>
-                                <td>{{ offers.itemInfo.itHitCount }}</td>
-                                <td>{{ offers.itemInfo.itOptions }}</td>
-                                <td>{{ offers.itemInfo.itState }}</td>
-                                <td>{{ offers.itemInfo.itStartingQuantity }}</td>
-                                <td>{{ offers.itemInfo.itIsForGuests }}</td>
-                                <td>{{ offers.itemInfo.itEndingInfo }}</td>
+                                <th><input type="checkbox"></input></th>
+                                <th>Id</th>
+                                <th>Nazwa</th>
+                                <th>Start</th>
+                                <th>Koniec</th>
+                                <th>Ilość</th>
+                                <th>Zdjęć</th>
+                                <th>Miejsce</th>
+                                <th>Cena kup teraz</th>
+                                <th>kup teraz</th>
+                                <th>Opis</th>
+                                <th>odsłon</th>
+                                <th>Opcje</th>
+                                <th>isState</th>
+                                <th>Str Qtty</th>
+                                <th>ForGuess</th>
+                                <th>EndingInfo</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {% for offers in offersList %}
+                                <tr class='clickable-row' data-href='{{ path('show_allegro',{'id':offers.itemInfo.itId}) }}'>
+                                    <td><input type="checkbox"></input></td>
+                                    <td>{{ offers.itemInfo.itId }}</td>
+                                    <td>{{ offers.itemInfo.itName }}</td>
+                                    <td>{{ offers.itemInfo.itStartingTime }}</td> 
+                                    <td>{{ offers.itemInfo.itEndingTime }}</td>
+                                    <td>{{ offers.itemInfo.itQuantity }}</td>
+                                    <td>{{ offers.itemInfo.itFotoCount }}</td>
+                                    <td>{{ offers.itemInfo.itLocation }}</td>
+                                    <td>{{ offers.itemInfo.itBuyNowPrice }}</td>
+                                    <td>{{ offers.itemInfo.itBuyNowActive }}</td>
+                                    <td style="width:200px; height: 20px">
+                                        <div style="width:200px; height: 20px; overflow:hidden;">
+                                            {{ offers.itemInfo.itDescription }}
+                                        </div>
+                                    </td>
+                                    <td>{{ offers.itemInfo.itHitCount }}</td>
+                                    <td>{{ offers.itemInfo.itOptions }}</td>
+                                    <td>{{ offers.itemInfo.itState }}</td>
+                                    <td>{{ offers.itemInfo.itStartingQuantity }}</td>
+                                    <td>{{ offers.itemInfo.itIsForGuests }}</td>
+                                    <td>{{ offers.itemInfo.itEndingInfo }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if prevpage is defined %}
+                        <a href="{{ path('index_allegro', {'page':prevpage} )}}" class="btn btn-secondary">{{prevpage}}</a>
+                    {% endif %}
+                    {% if nextpage is defined %}
+                        <a href="{{ path('index_allegro', {'page':nextpage} )}}" class="btn btn-secondary">{{nextpage}}</a>
+                    {% endif %}
+
+                </div>
+
+                {% include 'default/menu.html.twig' %}
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block stylesheets %}
-
 {% endblock %}

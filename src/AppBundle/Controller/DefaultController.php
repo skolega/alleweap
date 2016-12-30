@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Utils\AllegroWebAPI;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -85,6 +86,69 @@ class DefaultController extends Controller
         $template = str_replace('#user_field', '', $auction[0]->itemInfo->itDescription);
         return $this->render('default/show.html.twig', [
                     'template' => $template,
+        ]);
+    }
+
+    /**
+     * @Route("/allegro/search/auctions/", name="search_allegro")
+     */
+    public function searchAuctionAction(Request $request)
+    {
+        $product = $request->get('product');
+        $client = new AllegroWebAPI('c3fc5df5', 'fhug_mirodor', 'devil321');
+
+        if (!empty($product)) {
+            $params = array(
+                'sessionHandle' => $client->sessionHandle,
+                'accountType' => 'sell',
+            );
+
+            $aukcje = $client->doMyAccount2($params);
+
+            $tabela_ofert = [];
+
+
+            foreach ($aukcje->myaccountList->item as $item) {
+                $tabela_ofert[$item->myAccountArray->item[9]] = (int) $item->myAccountArray->item[0];
+            }
+
+            $auctionIds = [];
+            if (!empty($tabela_ofert)) {
+                foreach ($tabela_ofert as $productName => $auctionId) {
+                    if (strpos(strtolower($productName), strtolower($product)) !== false) {
+                        $auctionIds[] = $tabela_ofert[$productName];
+                    }
+                }
+            }
+
+            $params = array(
+                'sessionHandle' => $client->sessionHandle,
+                'itemsIdArray' => $auctionIds,
+                'getDesc' => 1,
+                'getImageUrl' => 1,
+                'getAttribs' => 1,
+                'getPostageOptions' => 1,
+                'getCompanyInfo' => 0,
+                'getProductInfo' => 0
+            );
+            $auction = $client->doGetItemsInfo($params);
+            $caountOffers = count($auction);
+            if ($caountOffers > 0) {
+                $result = $auction->arrayItemListInfo->item;
+            }
+        } else {
+            $result = [];
+            $caountOffers = 0;
+        }
+        $params = array(
+            'sessionHandle' => $client->sessionHandle,
+        );
+        $userData = $client->doGetMyData($params)->userData;
+
+        return $this->render('default/index.html.twig', [
+                    'userData' => $userData,
+                    'offersList' => $result,
+                    'countAuctions' => $caountOffers,
         ]);
     }
 
